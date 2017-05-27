@@ -1,0 +1,14 @@
+name: MoneyPlusAPI
+main: GE\MoneyPlusAPI
+version: 1.0.1
+load: POSTWORLD
+author: gigantessbeta
+description: Economy plugin.
+api:
+- 3.0.0
+- 2.0.0
+- 2.1.0
+commands:
+ m:
+  description: MoneyPlus's command.
+  usage: "Usage: /m {subcommand}"
