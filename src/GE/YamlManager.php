@@ -32,7 +32,7 @@ class YamlManager implements FunctionConnectManager{
 		}
 			$this->money = new Config($this->m->getDataFolder() . "money.yml", Config::YAML);
 			$this->c = new Config($this->m->getDataFolder() . "config.yml", Config::YAML, array(
-				'config-version' => '1',
+				'config-version' => '2',
 				'unit' => 'MP',
 				'max-money' => '1000000000',
 				'default-money' => '500',
@@ -43,6 +43,7 @@ class YamlManager implements FunctionConnectManager{
 				'command-view' => '%p の所持金: %a%b',
 				'command-pay' => '%p に %a%b 支払いました。',
 				'command-rank' => '所持金ランキング',
+				'command-rankme' => 'あなたは所持金ランキング %l 位です。',
 				'command-throw' => '%a%b 捨てました。',
 				'command-give' => '%p の所持金を %a%b 増やしました。',
 				'command-take' => '%p の所持金を %a%b 減らしました。',
@@ -52,11 +53,13 @@ class YamlManager implements FunctionConnectManager{
 				'error-console' => '§cコンソールからは実行できません。',
 				'error-money' => '§c所持金が足りません。',
 				'error-per' => '§c権限者専用のコマンドです。',
+				'error-rankmeop' => '§cあなたはランキング対象外です。',
 				'help' => array(
 					'help-check' => '/m check : 所持金確認',
 					'help-view' => '/m view {プレイヤー} : プレイヤーの所持金確認',
 					'help-pay' => '/m pay {プレイヤー} {金額} : プレイヤーに金額支払い',
 					'help-rank' => '/m rank {ページ数} : 所持金ランキング',
+					'help-rankme' => '/m rankme : 自分の所持金ランキングが何位か表示',
 					'help-throw' => '/m throw {金額} : 金額分所持金を捨てます。'
 					)
 			));

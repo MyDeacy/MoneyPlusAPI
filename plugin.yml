@@ -1,6 +1,6 @@
 name: MoneyPlusAPI
 main: GE\MoneyPlusAPI
-version: 1.0.1
+version: 1.0.5
 load: POSTWORLD
 author: gigantessbeta
 description: Economy plugin.

@@ -17,6 +17,7 @@
 | /m rank  | {page-number}   | 所持金ランキングを表示           |
 | /m pay   | {name} {amount} | {name}に{amount}の額お金を支払う |
 | /m throw | {amount}        | {amount}の額お金を捨てる         |
+| /m rankme | | 自分のランキングを確認 |
 | /m help  |                 | ヘルプを表示                     |
 
 権限者用
@@ -29,7 +30,7 @@
 
   
   
-APIについてはMoneyPlusAPI.php下部を参照  
+APIについてはMoneyPlusAPI.php下部を参照  
 
   
 こちらもご覧下さい。  
@@ -42,6 +43,5 @@ APIについてはMoneyPlusAPI.php下部を参照  
 gigantessbeta(Miyarin)  
     
 このプロジェクトは進行中です。  
-
 
 
