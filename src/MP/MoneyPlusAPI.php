@@ -19,6 +19,7 @@ use pocketmine\utils\Config;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
+use pocketmine\utils\Utils;
 
 use MP\event\MoneyChangeEvent;
 use MP\event\UserRegisterEvent;
@@ -32,16 +33,29 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 
 	const Cver = 2;
 
-	public function onEnable(){
-		$this->getLogger()->info("\n\n [§6========== §b MoneyPlus §6 ==========§f]\n§aThank you for using MoneyPlus.\n§cIt is distributed under GNU General Public License v3.0.\n§eAuthor: gigantessbeta[MiYaRiN] §btwitter @gigantessbeta\n");
+	Const Version = "2.0.1";
 
-		$this->getServer()->getPluginManager()->registerEvents($this, $this);
+	public function onEnable(){
+		$this->getLogger()->info("\n\n [§6========== §b MoneyPlus §6 ==========§f]\n§aThank you for using MoneyPlusAPI.\n§cIt is distributed under GNU General Public License v3.0.\n§eAuthor: gigantessbeta[MiYaRiN] §btwitter @gigantessbeta\n");
+
 		$this->y = new YamlManager($this);
 		
+		$newver = $this->checkUpdate();
+		if($newver == false){
+			$this->getLogger()->alert("A communication error occurred and the update could not be confirmed.\n\n");
+
+		}elseif($newver != MoneyPlusAPI::Version){
+			$this->getLogger()->emergency("The latest version has been released!");
+			$this->getLogger()->emergency("Please update this old plugin!  Latest version:".$newver."\n\n");
+
+		}
+
 		if($this->y->getData("config-version") != MoneyPlusAPI::Cver){
-			$this->getLogger()->notice(MoneyPlusAPI::Prefix."§c You need to renew the version of Config. Delete the existing Config file, restart it and update it.");
+			$this->getLogger()->emergency(MoneyPlusAPI::Prefix."§c You need to renew the version of Config. Delete the existing Config file, restart it and update it.\n");
 		}
 		$this->unit = $this->y->getData("unit");
+
+		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 	}
 
 	public function Join(PlayerJoinEvent $event){
@@ -51,6 +65,14 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 			$player->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("register")."");
 			$this->y->setPlayerData($name, "this-plugin");
 		}
+	}
+
+	private function checkUpdate(){
+		$result = Utils::getURL("https://raw.githubusercontent.com/gigantessbeta/VersionList/master/MoneyPlusAPI.txt");
+		if($result == false){
+			return $result;
+		}
+		return rtrim($result, "\n");
 	}
 
 	public function onCommand(CommandSender $sender, Command $command, $label, array $args){
