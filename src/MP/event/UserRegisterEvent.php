@@ -23,8 +23,8 @@ class UserRegisterEvent extends PluginEvent implements Cancellable{
 
 	public static $handlerList;
 	private $ym;
-	public function __construct(YamlManager $ym, MoneyPlusAPI $m, $name, $defmoney, $case){
-		parent::__construct($ym, $m);
+
+	public function __construct($name, $defmoney, $case){
 		$this->name = $name;
 		$this->df = $defmoney;
 		$this->case = $case;
@@ -39,6 +39,7 @@ class UserRegisterEvent extends PluginEvent implements Cancellable{
 	public function getMoney(){
 		return $this->def;
 	}
+
 
 	public function getCase(){
 		return $this->case;

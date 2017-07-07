@@ -24,6 +24,7 @@ interface FunctionConnectManager{
 	public function takeMoney(String $name, int $price, $case);
 	public function setMoney(String $name, int $price, $case);
 	public function setPlayerData(String $name, $case);
+	public function removePlayerData(String $name, $case);
 	public function exist(string $name);
 	public function getData(String $key);
 	public function getAllMoney();

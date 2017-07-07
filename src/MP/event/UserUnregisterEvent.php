@@ -19,15 +19,14 @@ use MP\MoneyPlusAPI;
 use pocketmine\event\Cancellable;
 use pocketmine\event\plugin\PluginEvent;
 
-class MoneyChangeEvent extends PluginEvent implements Cancellable{
+class UserUnregisterEvent extends PluginEvent implements Cancellable{
 
 	public static $handlerList;
 	private $ym;
 
-	public function __construct($name, $beforemoney, $result, $case){
+	public function __construct($name, $money, $case){
 		$this->name = $name;
-		$this->bm = $beforemoney;
-		$this->res = $result;
+		$this->money = $money;
 		$this->case = $case;
 	}
 
@@ -37,19 +36,8 @@ class MoneyChangeEvent extends PluginEvent implements Cancellable{
 	}
 
 
-	public function getBeforeMoney(){
-		return $this->bm;
-	}
-
-
 	public function getMoney(){
-		return $this->res;
-	}
-
-
-	public function getChangedValue(){
-		$result = $this->res - $this->bm;
-		return $result;
+		return $this->money;
 	}
 
 

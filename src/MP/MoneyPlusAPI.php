@@ -23,20 +23,28 @@ use pocketmine\utils\Utils;
 
 use MP\event\MoneyChangeEvent;
 use MP\event\UserRegisterEvent;
+use MP\event\UserUnregisterEvent;
 
 use MP\DataAccess\FunctionConnectManager;
 use MP\DataAccess\YamlManager;
 
 class MoneyPlusAPI extends PluginBase implements Listener{
 
+/*const の部分はいじら名でください。*/
+
 	const Prefix = "§7[§bMP§7]§f ";
 
 	const Cver = 2;
 
-	Const Version = "2.0.1";
+	Const Version = "2.0.4";
+
+	private static $instance = null;
+
 
 	public function onEnable(){
 		$this->getLogger()->info("\n\n [§6========== §b MoneyPlus §6 ==========§f]\n§aThank you for using MoneyPlusAPI.\n§cIt is distributed under GNU General Public License v3.0.\n§eAuthor: gigantessbeta[MiYaRiN] §btwitter @gigantessbeta\n");
+
+		self::$instance = $this;
 
 		$this->y = new YamlManager($this);
 		
@@ -53,6 +61,7 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 		if($this->y->getData("config-version") != MoneyPlusAPI::Cver){
 			$this->getLogger()->emergency(MoneyPlusAPI::Prefix."§c You need to renew the version of Config. Delete the existing Config file, restart it and update it.\n");
 		}
+
 		$this->unit = $this->y->getData("unit");
 
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
@@ -301,45 +310,64 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 	}//command function
 	
 
-
 /*------END Main------*/
 
 
 
-//外部使用用API群
+/*------ API使用用関数群 ------*/
+
+/*MoneyPlusAPIを返す*/
+	public static function getInstance(){
+		return self::$instance;
+	}
+
+
 /*所持金取得*/
 	public function getMoney(String $name){
 		return $this->y->getMoney($name);
 	}
+
 /*所持金増やす*/	
 	public function addMoney(String $name, int $price){
 		$this->y->addMoney($name, $price, "Outside");
 		
 	}
+
 /*所持金減額wwwwwww*/
 	public function takeMoney(String $name, int $price){
 		$this->y->takeMoney($name, $price, "Outside");
 	}
+
 /*所持金設定*/
 	public function setMoney(String $name, int $price){
 		$this->y->setMoney($name, $price, "Outside");
 	}
+
 /*データがあるか確認*/
 	public function exist(string $name){
 		return $this->y->exist($name);
 	}
+
 /*初回入室時などの際に登録*/
 	public function setPlayerData(String $name){
 		$this->y->setPlayerData($name, "Outside");
 	}
+
+	public function removePlayerData(String $name){
+			return $this->y->removePlayerData($name, "Outside");
+	}
 	
-/*便利な 設定取得関数*/
+/*通貨の単位を取得*/
 	public function getUnit(){
 		return $this->y->getData("unit");
 	}
+
+/*初期所持金を取得*/
 	public function getDefaultMoney(){
 		return $this->y->getData("default-money");
 	}
+
+/*全ユーザーの所持金を一括取得(array)*/
 	public function getAllMoney(){
 		return $this->y->getAllMoney();
 	}
