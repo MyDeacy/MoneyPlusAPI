@@ -30,7 +30,8 @@
 
   
   
-APIについてはMoneyPlusAPI.php下部を参照  
+API,Eventについては開発用ドキュメントをご覧ください。  
+<http://mpdoc.wpblog.jp>  
 
   
 こちらもご覧下さい。  
