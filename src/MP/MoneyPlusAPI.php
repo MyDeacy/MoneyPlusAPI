@@ -122,10 +122,10 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 							}else{
 								$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-not")."");
 							}
-					}else{
-						$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-type")."");
+						}else{
+							$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-type")."");
 
-					}
+						}
 						return true;
 						break;
 
