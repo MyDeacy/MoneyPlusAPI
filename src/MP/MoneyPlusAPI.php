@@ -30,7 +30,7 @@ use MP\DataAccess\YamlManager;
 
 class MoneyPlusAPI extends PluginBase implements Listener{
 
-/*const の部分はいじら名でください。*/
+/*const の部分はいじらないでください。*/
 
 	const Prefix = "§7[§bMP§7]§f ";
 
