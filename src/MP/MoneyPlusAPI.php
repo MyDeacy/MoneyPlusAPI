@@ -30,13 +30,13 @@ use MP\DataAccess\YamlManager;
 
 class MoneyPlusAPI extends PluginBase implements Listener{
 
-/*const の部分はいじら名でください。*/
+/*const の部分はいじらないでください。*/
 
 	const Prefix = "§7[§bMP§7]§f ";
 
 	const Cver = 2;
 
-	Const Version = "2.0.5";
+	Const Version = "2.0.7";
 
 	private static $instance = null;
 
@@ -62,7 +62,7 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 			$this->getLogger()->emergency(MoneyPlusAPI::Prefix."§c You need to renew the version of Config. Delete the existing Config file, restart it and update it.\n");
 		}
 
-		$this->unit = $this->y->getData("unit");
+		$this->unit = $this->getUnit("unit");
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 	}
 
@@ -70,7 +70,7 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 		$player = $event->getPlayer();
 		$name = $player->getName();
 		if(!$this->y->exist($name)){
-			$player->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("register")."");
+			$player->sendMessage($this->getMessage("register")."");
 			$this->y->setPlayerData($name, "this-plugin");
 		}
 	}
@@ -83,17 +83,23 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 		return rtrim($result, "\n");
 	}
 
+	public function sendHelp($player){
+		$a = $this->y->getData("help");
+		$player->sendMessage("§l§e[ §bMoneyPlus's help §e]");
+		foreach($a as $aho => $b){
+			$player->sendMessage("".$b."");
+		}
+	}
+	public function getMessage($key){
+		return "".MoneyPlusAPI::Prefix.$this->y->getData($key);
+	}
+
 	public function onCommand(CommandSender $sender, Command $command, $label, array $args){
 		switch(strtolower($command->getName())){
 			case "m":
 				if(!isset($args[0])){
-					$a = $this->y->getData("help");
-						$sender->sendMessage("§l§e[ §bMoneyPlus's help §e]");
-					foreach($a as $aho => $b){
-						$sender->sendMessage("".$b."");
-					}
+					$this->sendHelp($sender);
 					return true;
-					
 				}
 				if($sender instanceof Player){
 					$smoney = $this->y->getMoney($sender->getName());
@@ -105,10 +111,10 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 				switch($args[0]){
 					case "check":
 						if($check === true){
-							$message = $this->y->getData("command-check");
-							$sender->sendMessage(str_replace(array('%a', '%b'), array($smoney, $this->unit), MoneyPlusAPI::Prefix.$message));
+							$message = $this->getMessage("command-check");
+							$sender->sendMessage(str_replace(array('%a', '%b'), array($smoney, $this->unit), $message));
 						}else{
-							$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-console")."");
+							$sender->sendMessage($this->getMessage("error-console")."");
 						}
 						return true;
 						break;
@@ -116,16 +122,16 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 					case "view":
 						if(isset($args[1])){
 							if($this->y->exist($args[1])){
-								$message = $this->y->getData("command-view");
+								$message = $this->getMessage("command-view");
 								$money = $this->y->getMoney($args[1]);
-								$sender->sendMessage(str_replace(array('%p', '%a', '%b'), array($args[1], $money, $this->unit),  MoneyPlusAPI::Prefix.$message));
+								$sender->sendMessage(str_replace(array('%p', '%a', '%b'), array($args[1], $money, $this->unit),  $message));
 							}else{
-								$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-not")."");
+								$sender->sendMessage($this->getMessage("error-not")."");
 							}
-					}else{
-						$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-type")."");
+						}else{
+							$sender->sendMessage($this->getMessage("error-type")."");
 
-					}
+						}
 						return true;
 						break;
 
@@ -133,31 +139,31 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 						if($check === true){
 							if(isset($args[2]) && is_numeric($args[2])){
 								if($this->y->exist($args[1])){
-									$message = $this->y->getData("command-pay");
+									$message = $this->getMessage("command-pay");
 									$result = $smoney - $args[2];
 
-									if($result < 0){
+									if($result > 0){
 		
 										$this->y->takeMoney($sender->getName(), $args[2], "command-pay-send");
-								 		$sender->sendMessage(str_replace(array('%p', '%a', '%b'), array($args[1], $args[2], $this->unit),  MoneyPlusAPI::Prefix.$message));
+								 		$sender->sendMessage(str_replace(array('%p', '%a', '%b'), array($args[1], $args[2], $this->unit),  $message));
 
 										$this->y->addMoney($args[1], $args[2], "command-pay-receive");
 										if($this->getServer()->getPlayer($args[0]) != null){
-											$message2 = $this->y->getData("money-received");
-											$sender->sendMessage(str_replace(array('%p', '%a', '%b'), array($sender->getName(), $args[2], $this->unit),  MoneyPlusAPI::Prefix.$message2));
+											$message2 = $this->getMessage("money-received");
+											$sender->sendMessage(str_replace(array('%p', '%a', '%b'), array($sender->getName(), $args[2], $this->unit),  $message2));
 										}
 									}else{
-										$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-money")."");
+										$sender->sendMessage($this->getMessage("error-money")."");
 									}
 								}else{
-									$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-not")."");
+									$sender->sendMessage($this->getMessage("error-not")."");
 								}
 
 							}else{
-								$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-type")."");
+								$sender->sendMessage($this->getMessage("error-type")."");
 							}
 						}else{
-							$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-console")."");
+							$sender->sendMessage($this->getMessage("error-console")."");
 						}
 						return true;
 						break;
@@ -193,7 +199,7 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 								$i++;
 							}
 						}else{
-							$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-type")."");
+							$sender->sendMessage($this->getMessage("error-type")."");
 						}					
 						return true;
 						break;
@@ -213,15 +219,15 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 								}
 									$i1 = $i + 1;
 									if($a == $sender->getName()){
-										$sender->sendMessage(str_replace('%l', $i1, MoneyPlusAPI::Prefix.$this->y->getData("command-rankme").""));
+										$sender->sendMessage(str_replace('%l', $i1, $this->getMessage("command-rankme").""));
 										return true;
 									}
 								$i++;
 							}
-							$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-rankmeop")."");
+							$sender->sendMessage($this->getMessage("error-rankmeop")."");
 
 						}else{
-							$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-console")."");
+							$sender->sendMessage($this->getMessage("error-console")."");
 						}
 						return true;
 						break;
@@ -230,93 +236,85 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 						if($check === true){
 							if(isset($args[1]) || is_numeric($args[1])){
 
-								$message = $this->y->getData("command-throw");
-								$sender->sendMessage(str_replace(array('%a', '%b'), array($args[1], $this->unit),  MoneyPlusAPI::Prefix.$message));
+								$message = $this->getMessage("command-throw");
+								$sender->sendMessage(str_replace(array('%a', '%b'), array($args[1], $this->unit),  $message));
 								$this->y->takeMoney($sender->getName(), $args[1], "command-throw");
 							}else{
-								$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-type")."");
+								$sender->sendMessage($this->getMessage("error-type")."");
 							}
 						}else{
-							$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-console")."");
+							$sender->sendMessage($this->getMessage("error-console")."");
 						}
 						return true;
 						break;
 
 					case "give":
-						if($sender->isOp()){
-							if(isset($args[2]) || is_numeric($args[2])){
+						if($sender->hasPermission('opcommand')){
+							if(isset($args[2]) && is_numeric($args[2])){
 								if($this->y->exist($args[1])){
 			
-									$message = $this->y->getData("command-give");
-									$sender->sendMessage(str_replace(array('%p', '%a', '%b'), array($args[1], $args[2], $this->unit),  MoneyPlusAPI::Prefix.$message));
+									$message = $this->getMessage("command-give");
+									$sender->sendMessage(str_replace(array('%p', '%a', '%b'), array($args[1], $args[2], $this->unit),  $message));
 									$this->y->addMoney($args[1], $args[2], "command-give");
 								}else{
-									$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-not")."");
+									$sender->sendMessage($this->getMessage("error-not")."");
 								}
 							}else{
-								$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-type")."");
+								$sender->sendMessage($this->getMessage("error-type")."");
 							}
 						}else{
-							$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-per")."");
+							$sender->sendMessage($this->getMessage("error-per")."");
 						}
 						return true;
 						break;
 
 					case "take":
-						if($sender->isOp()){
-							if(isset($args[2]) || is_numeric($args[2])){
+						if($sender->hasPermission('opcommand')){
+							if(isset($args[2]) && is_numeric($args[2])){
 								if($this->y->exist($args[1])){
 			
-									$message = $this->y->getData("command-take");
-									$sender->sendMessage(str_replace(array('%p', '%a', '%b'), array($args[1], $args[2], $this->unit),  MoneyPlusAPI::Prefix.$message));
+									$message = $this->getMessage("command-take");
+									$sender->sendMessage(str_replace(array('%p', '%a', '%b'), array($args[1], $args[2], $this->unit),  $message));
 									$this->y->takeMoney($args[1], $args[2], "command-take");
 								}else{
-									$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-not")."");
+									$sender->sendMessage($this->getMessage("error-not")."");
 								}
 							}else{
-								$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-type")."");
+								$sender->sendMessage($this->getMessage("error-type")."");
 							}
 						}else{
-							$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-per")."");
+							$sender->sendMessage($this->getMessage("error-per")."");
 						}
 						return true;
 						break;
 
 					case "set":
-						if($sender->isOp()){
-							if(isset($args[2]) || is_numeric($args[2])){
+						if($sender->hasPermission('opcommand')){
+							if(isset($args[2]) && is_numeric($args[2])){
 								if($this->y->exist($args[1])){
 			
-									$message = $this->y->getData("command-set");
-									$sender->sendMessage(str_replace(array('%p', '%a', '%b'), array($args[1], $args[2], $this->unit),  MoneyPlusAPI::Prefix.$message));
+									$message = $this->getMessage("command-set");
+									$sender->sendMessage(str_replace(array('%p', '%a', '%b'), array($args[1], $args[2], $this->unit),  $message));
 									$this->y->setMoney($args[1], $args[2], "command-set");
 								}else{
-									$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-not")."");
+									$sender->sendMessage($this->getMessage("error-not")."");
 								}
 							}else{
-								$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-type")."");
+								$sender->sendMessage($this->getMessage("error-type")."");
 							}
 						}else{
-							$sender->sendMessage(MoneyPlusAPI::Prefix.$this->y->getData("error-per")."");
+							$sender->sendMessage($this->getMessage("error-per")."");
 						}
 						return true;
 						break;
 
 					case "help":
-						$a = $this->y->getData("help");
-						$sender->sendMessage("§l§e[ §bMoneyPlus's help §e]");
-						foreach($a as $aho => $b){
-							$sender->sendMessage("".$b."");
-						}
+						$this->sendHelp($sender);
 						return true;
 						break;
 
 					default:
-						$a = $this->y->getData("help");
-						$sender->sendMessage("§l§e[ MoneyPlus's help ]");
-						foreach($a as $aho => $b){
-							$sender->sendMessage("".$b."");
-						}
+						$this->sendHelp($sender);
 						return true;
 						break;
 				}//subcommand switch

@@ -1,6 +1,6 @@
 name: MoneyPlusAPI
 main: MP\MoneyPlusAPI
-version: 2.0.5
+version: 2.0.7
 load: POSTWORLD
 author: gigantessbeta
 description: Economy plugin.
@@ -12,3 +12,7 @@ commands:
  m:
   description: MoneyPlus's command.
   usage: "Usage: /m {subcommand}"
+permissions:
+ opcommand:
+  description: OP command.
+  default: op
