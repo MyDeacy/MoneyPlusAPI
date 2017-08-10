@@ -164,6 +164,7 @@ class YamlManager extends PluginBase implements FunctionConnectManager{
 	}
 
 	public function removePlayerData(String $name, $case){
+		$name = strtolower($name);
 		if(!$this->money->exists($name)){
 			return false;
 		}

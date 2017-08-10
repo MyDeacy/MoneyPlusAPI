@@ -36,7 +36,7 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 
 	const Cver = 2;
 
-	Const Version = "2.0.7";
+	Const Version = "2.0.8";
 
 	private static $instance = null;
 
@@ -218,7 +218,7 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 									continue;
 								}
 									$i1 = $i + 1;
-									if($a == $sender->getName()){
+									if($a == strtolower($sender->getName())){
 										$sender->sendMessage(str_replace('%l', $i1, $this->getMessage("command-rankme").""));
 										return true;
 									}
