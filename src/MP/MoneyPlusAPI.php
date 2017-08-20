@@ -36,10 +36,14 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 
 	const Cver = 2;
 
-	Const Version = "2.0.8";
+	Const Version = "2.0.9";
 
 	private static $instance = null;
 
+
+	public function onLoad(){
+		$this->getServer()->getPluginManager()->enablePlugin($this);
+	}
 
 	public function onEnable(){
 		$this->getLogger()->info("\n\n [§6========== §b MoneyPlus §6 ==========§f]\n§aThank you for using MoneyPlusAPI.\n§cIt is distributed under GNU General Public License v3.0.\n§eAuthor: gigantessbeta[MiYaRiN] §btwitter @gigantessbeta\n");
@@ -62,7 +66,7 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 			$this->getLogger()->emergency(MoneyPlusAPI::Prefix."§c You need to renew the version of Config. Delete the existing Config file, restart it and update it.\n");
 		}
 
-		$this->unit = $this->getUnit("unit");
+		$this->unit = $this->getUnit();
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 	}
 
@@ -87,7 +91,7 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 		$a = $this->y->getData("help");
 		$player->sendMessage("§l§e[ §bMoneyPlus's help §e]");
 		foreach($a as $aho => $b){
-			$player->sendMessage("".$b."");
+			$player->sendMessage("§r§f".$b."");
 		}
 	}
 	public function getMessage($key){
