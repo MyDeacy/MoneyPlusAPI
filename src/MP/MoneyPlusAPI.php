@@ -98,7 +98,7 @@ class MoneyPlusAPI extends PluginBase implements Listener{
 		return "".MoneyPlusAPI::Prefix.$this->y->getData($key);
 	}
 
-	public function onCommand(CommandSender $sender, Command $command, $label, array $args){
+	public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool{
 		switch(strtolower($command->getName())){
 			case "m":
 				if(!isset($args[0])){
